@@ -1,0 +1,53 @@
+name: Release — semantic-release
+
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        description: "Répertoire de travail si le projet n'est pas à la racine"
+        type: string
+        default: "."
+    secrets:
+      RELEASE_TOKEN:
+        description: "GitHub token avec les permissions nécessaires pour créer des releases et push des tags"
+        required: true
+
+jobs:
+  release:
+    name: Semantic Release
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install semantic-release
+        run: |
+          bun add --dev \
+            semantic-release \
+            @semantic-release/changelog \
+            @semantic-release/git \
+            @semantic-release/github \
+            conventional-changelog-conventionalcommits
+
+      - name: Run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
+        run: bunx semantic-release
