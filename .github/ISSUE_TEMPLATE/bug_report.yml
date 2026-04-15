@@ -1,0 +1,65 @@
+name: "🐛 Bug Report"
+description: Signaler un comportement inattendu ou une erreur
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Merci de prendre le temps de signaler ce bug. Plus tu es précis, plus vite on peut le corriger.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Décris le bug de manière claire et concise.
+      placeholder: "Quand je fais X, il se passe Y au lieu de Z."
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Étapes pour reproduire
+      description: Liste les étapes pour reproduire le comportement.
+      placeholder: |
+        1. Aller sur '...'
+        2. Cliquer sur '...'
+        3. Voir l'erreur
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportement attendu
+      description: Ce qui devrait se passer normalement.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportement observé
+      description: Ce qui se passe réellement.
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte additionnel
+      description: Screenshots, logs, version du navigateur, OS, etc.
+      placeholder: "Navigateur: Chrome 123, OS: macOS 15..."
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Sévérité
+      options:
+        - "🔴 Critical — bloque la production"
+        - "🟠 High — impact majeur sur l'expérience"
+        - "🟡 Medium — gênant mais contournable"
+        - "🟢 Low — cosmétique ou mineur"
+    validations:
+      required: true

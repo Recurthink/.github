@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussion générale
+    url: https://github.com/orgs/Recurthink/discussions
+    about: Pour les questions, idées ouvertes ou sujets qui ne sont pas encore des issues.
+  - name: 🔐 Rapport de sécurité (privé)
+    url: https://github.com/Recurthink/.github/blob/main/SECURITY.md
+    about: Pour signaler une vulnérabilité de manière responsable — ne pas ouvrir d'issue publique.

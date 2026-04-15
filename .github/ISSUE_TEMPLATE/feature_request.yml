@@ -1,0 +1,65 @@
+name: "✨ Feature Request"
+description: Proposer une nouvelle fonctionnalité ou amélioration
+title: "[FEATURE] "
+labels: ["feature", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Une idée ? Super. Explique-nous le problème que tu veux résoudre — on cherche toujours à améliorer l'expérience.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problème à résoudre
+      description: Quel est le problème ou le manque actuel ?
+      placeholder: "Je suis frustré quand... / Il n'est pas possible de..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution proposée
+      description: Décris la feature que tu imagines.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considérées
+      description: As-tu envisagé d'autres approches ?
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Domaine concerné
+      options:
+        - "🖥️ UI / Frontend"
+        - "⚙️ Backend / API"
+        - "🗄️ Base de données"
+        - "🚀 Infrastructure / DevOps"
+        - "📦 Librairie / SDK"
+        - "📚 Documentation"
+        - "🔐 Sécurité"
+        - "Autre"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priorité estimée
+      options:
+        - "🔴 Must-have — bloque un cas d'usage clé"
+        - "🟠 Should-have — améliore significativement"
+        - "🟡 Nice-to-have — confort ou polish"
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte additionnel
+      description: Maquettes, références, exemples d'autres produits, etc.

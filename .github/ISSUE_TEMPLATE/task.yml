@@ -1,0 +1,59 @@
+name: "📋 Task"
+description: Une tâche technique, de refacto, de maintenance ou de documentation
+title: "[TASK] "
+labels: ["task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Pour les tâches techniques internes : refacto, migration, mise à jour de dépendances, documentation, etc.
+
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objectif
+      description: Que faut-il accomplir et pourquoi ?
+    validations:
+      required: true
+
+  - type: textarea
+    id: checklist
+    attributes:
+      label: Sous-tâches
+      description: Décompose la tâche en étapes actionnables.
+      placeholder: |
+        - [ ] Étape 1
+        - [ ] Étape 2
+        - [ ] Tests
+        - [ ] Mise à jour de la doc
+
+  - type: dropdown
+    id: type
+    attributes:
+      label: Type de tâche
+      options:
+        - "🔧 Maintenance / Mise à jour"
+        - "♻️ Refactoring"
+        - "📚 Documentation"
+        - "🧪 Tests"
+        - "🔒 Sécurité"
+        - "🚀 Infrastructure / CI/CD"
+        - "⚡ Performance"
+        - "Autre"
+    validations:
+      required: true
+
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition of Done
+      description: Comment sait-on que la tâche est terminée ?
+      placeholder: "La tâche est terminée quand..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexte / Liens utiles
+      description: Issues liées, docs, PRs de référence, etc.

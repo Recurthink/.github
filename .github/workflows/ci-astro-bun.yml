@@ -1,0 +1,53 @@
+name: CI — Astro + Bun
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Version de Node (pour la compatibilité Astro)"
+        type: string
+        default: "22"
+      working-directory:
+        description: "Répertoire de travail si le projet n'est pas à la racine"
+        type: string
+        default: "."
+    secrets:
+      COOLIFY_WEBHOOK_URL:
+        description: "URL du webhook Coolify (optionnel — déclenche un deploy si fourni)"
+        required: false
+
+jobs:
+  ci:
+    name: Build & Lint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Type check
+        run: bun run astro check
+        continue-on-error: false
+
+      - name: Build
+        run: bun run build
+        env:
+          NODE_ENV: production
+
+      - name: Notify Coolify (deploy)
+        if: ${{ github.ref == 'refs/heads/main' && secrets.COOLIFY_WEBHOOK_URL != '' }}
+        run: |
+          curl --silent --fail \
+            -X GET "${{ secrets.COOLIFY_WEBHOOK_URL }}" \
+            -H "Accept: application/json"
