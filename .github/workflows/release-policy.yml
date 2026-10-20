@@ -1,0 +1,28 @@
+name: Release label policy
+
+on:
+  workflow_call:
+    inputs:
+      tooling-ref:
+        type: string
+        default: main
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate release choices
+    runs-on: ubuntu-latest
+    steps:
+      # Only trusted tooling is checked out; no code from the proposed PR is run.
+      - uses: actions/checkout@v4
+        with:
+          repository: Recurthink/.github
+          ref: ${{ inputs.tooling-ref }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci --prefix release --ignore-scripts --no-audit --no-fund
+      - run: node release/validate-pr.mjs
