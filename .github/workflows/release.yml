@@ -1,53 +1,87 @@
-name: Release — semantic-release
+name: Release
 
 on:
   workflow_call:
     inputs:
       working-directory:
-        description: "Répertoire de travail si le projet n'est pas à la racine"
+        description: Conservé pour les appels existants ; la version concerne le dépôt entier.
         type: string
-        default: "."
+        default: '.'
+      release-branch:
+        type: string
+        default: main
+      bump:
+        description: auto, patch, minor, major ou none
+        type: string
+        default: auto
+      suffix:
+        description: Suffixe de préversion optionnel, par exemple dev ou canary
+        type: string
+        default: ''
+      dry-run:
+        description: Calculer la version sans créer de tag ni de release
+        type: boolean
+        default: false
+      tooling-ref:
+        description: Révision des outils partagés ; permet de tester une PR avant sa fusion
+        type: string
+        default: main
     secrets:
       RELEASE_TOKEN:
-        description: "GitHub token avec les permissions nécessaires pour créer des releases et push des tags"
-        required: true
+        description: Optionnel ; le GITHUB_TOKEN du workflow est utilisé par défaut
+        required: false
+    outputs:
+      released:
+        value: ${{ jobs.release.outputs.released }}
+      version:
+        value: ${{ jobs.release.outputs.version }}
+      tag:
+        value: ${{ jobs.release.outputs.tag }}
+      release-url:
+        value: ${{ jobs.release.outputs.release-url }}
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: read
 
 jobs:
   release:
-    name: Semantic Release
+    name: Tag and GitHub Release
+    if: github.ref == format('refs/heads/{0}', inputs.release-branch) && (github.event_name == 'push' || github.event_name == 'workflow_dispatch')
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ${{ inputs.working-directory }}
-
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-      id-token: write
-
+    concurrency:
+      group: release-${{ github.repository }}
+      cancel-in-progress: false
+    outputs:
+      released: ${{ steps.publish.outputs.released }}
+      version: ${{ steps.publish.outputs.version }}
+      tag: ${{ steps.publish.outputs.tag }}
+      release-url: ${{ steps.publish.outputs.release-url }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.RELEASE_TOKEN }}
-
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v2
+          ref: ${{ github.sha }}
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
+      - name: Checkout shared release tools
+        uses: actions/checkout@v4
         with:
-          bun-version: latest
-
-      - name: Install semantic-release
-        run: |
-          bun add --dev \
-            semantic-release \
-            @semantic-release/changelog \
-            @semantic-release/git \
-            @semantic-release/github \
-            conventional-changelog-conventionalcommits
-
-      - name: Run semantic-release
+          repository: Recurthink/.github
+          ref: ${{ inputs.tooling-ref }}
+          path: .recurthink-release-tools
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install locked release dependencies
+        run: npm ci --prefix .recurthink-release-tools/release --ignore-scripts --no-audit --no-fund
+      - name: Calculate and publish version
+        id: publish
+        run: node .recurthink-release-tools/release/run.mjs
         env:
-          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
-        run: bunx semantic-release
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN || github.token }}
+          RELEASE_BRANCH: ${{ inputs.release-branch }}
+          RELEASE_BUMP: ${{ inputs.bump }}
+          RELEASE_SUFFIX: ${{ inputs.suffix }}
+          RELEASE_DRY_RUN: ${{ inputs.dry-run }}

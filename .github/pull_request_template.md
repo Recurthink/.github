@@ -1,43 +1,16 @@
-## 🔗 Issue liée
+## Ce qui change
 
-Closes #<!-- numéro de l'issue -->
+<!-- Le problème et le résultat attendu. Lier l’issue si elle existe. -->
 
----
+## Vérifications
 
-## 📝 Description
+<!-- Ce qui a été testé. Ajouter une capture si le rendu change. -->
 
-<!-- Explique les changements apportés et pourquoi. -->
+Pour une PR vers `main`, la version se choisit dans **Labels**. Sans label, elle est calculée depuis les commits.
+[Choix de version et de canal](https://github.com/Recurthink/.github/blob/main/release/README.md).
 
----
-
-## 🔄 Type de changement
-
-- [ ] 🐛 Bug fix (changement non-breaking qui corrige un problème)
-- [ ] ✨ Nouvelle feature (changement non-breaking qui ajoute une fonctionnalité)
-- [ ] 💥 Breaking change (fix ou feature qui casse la compatibilité existante)
-- [ ] ♻️ Refactoring (pas de changement de comportement)
-- [ ] 📚 Documentation
-- [ ] 🚀 CI/CD / Infrastructure
-- [ ] ⚡ Performance
-
----
-
-## ✅ Checklist
-
-- [ ] Mon code suit les conventions du projet ([CONTRIBUTING.md](../blob/main/CONTRIBUTING.md))
-- [ ] J'ai testé mes changements localement
-- [ ] J'ai mis à jour la documentation si nécessaire
-- [ ] Les changements ne génèrent pas de nouveaux warnings
-- [ ] Le build passe en local (`bun run build`)
-
----
-
-## 📸 Screenshots / Démo
-
-<!-- Si applicable, ajoute des screenshots ou une vidéo courte pour montrer le rendu. -->
-
----
-
-## 💬 Notes pour le reviewer
-
-<!-- Contexte supplémentaire, points d'attention, questions ouvertes... -->
+<!-- PR vers main : la version est calculée depuis les commits.
+Pour forcer le choix, ajouter UN label release:patch / release:minor / release:major / release:none.
+Canal optionnel : release:channel:dev, release:channel:canary ou release:channel:rc.
+Les choix se font dans le menu Labels de la PR, pas en modifiant ce texte.
+Voir https://github.com/Recurthink/.github/blob/main/release/README.md -->

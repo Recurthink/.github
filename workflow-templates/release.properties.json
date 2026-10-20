@@ -1,0 +1,6 @@
+{
+  "name": "Versions Recurthink",
+  "description": "Tags SemVer automatiques, choix par labels de PR et formulaire de publication manuelle avec suffixe.",
+  "iconName": "octicon tag",
+  "categories": ["Automation"]
+}

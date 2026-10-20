@@ -1,0 +1,6 @@
+{
+  "name": "Choix de version des PR Recurthink",
+  "description": "Vérifie que les labels de version et de canal d’une PR ne se contredisent pas.",
+  "iconName": "octicon checklist",
+  "categories": ["Automation"]
+}

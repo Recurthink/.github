@@ -1,0 +1,37 @@
+name: Version
+
+on:
+  push:
+    branches: [$default-branch]
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Type de version (auto = selon les commits)
+        type: choice
+        options: [auto, patch, minor, major, none]
+        default: auto
+      suffix:
+        description: Suffixe optionnel (dev, canary, rc… ; vide = stable)
+        type: string
+        default: ''
+      dry-run:
+        description: Simulation, sans création de tag
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    # Avec une CI dans le même workflow, ajouter needs: nom-du-job-ci.
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: read
+    uses: Recurthink/.github/.github/workflows/release.yml@main
+    with:
+      release-branch: $default-branch
+      bump: ${{ inputs.bump || 'auto' }}
+      suffix: ${{ inputs.suffix || '' }}
+      dry-run: ${{ inputs.dry-run || false }}
