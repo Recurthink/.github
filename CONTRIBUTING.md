@@ -48,7 +48,7 @@ release/* ← préparation de release formelle (optionnel)
 1. Crée `hotfix/<description>` depuis `main`
 2. Corrige le problème
 3. Ouvre une PR vers `main` — CI obligatoire
-4. Après merge sur `main` → semantic-release crée automatiquement le patch tag
+4. Après merge sur `main`, le workflow partagé calcule la version et crée le tag
 5. **Back-merge obligatoire** : ouvre aussi une PR `hotfix/<x> → develop` pour ne pas perdre le fix
 
 ---
@@ -142,18 +142,15 @@ BREAKING CHANGE: all API responses now use camelCase keys instead of snake_case
 
 ## Versioning automatique
 
-Sur chaque merge vers `main`, **semantic-release** analyse automatiquement les commits depuis le dernier tag et :
+Après la CI sur `main`, le workflow partagé analyse les Conventional Commits et crée le tag et la GitHub Release.
 
-1. Détermine le prochain numéro de version (SemVer)
-2. Crée le **Git tag** (`v1.2.3`)
-3. Génère les **notes de release** à partir des commits
-4. Met à jour **CHANGELOG.md**
-5. Crée la **GitHub Release**
-6. Déclenche le **deploy Coolify** via webhook
+Pour choisir explicitement la version, utiliser un seul label `release:patch`, `release:minor`, `release:major` ou `release:none` sur la PR vers `main`.
+Un label `release:channel:dev`, `release:channel:canary` ou `release:channel:rc` ajoute un suffixe de préversion.
 
-Sur `develop`, les merges génèrent des **pre-releases** (`v1.2.3-beta.1`) accessibles sans polluer le canal stable.
+Le formulaire **Run workflow** dans Actions permet aussi de choisir le type, le suffixe et une simulation.
+La publication reste liée à la CI du projet. Aucun commit de changelog ou de dépendances n’est généré.
 
-**Tu n'as jamais à créer un tag manuellement.** Écris juste des bons commits.
+Voir [le guide des versions](release/README.md) pour les exemples, le fonctionnement des préversions et l’installation dans un dépôt.
 
 ---
 

@@ -1,0 +1,10 @@
+name: Choix de version
+on:
+  pull_request:
+    branches: [$default-branch]
+    types: [opened, reopened, synchronize, labeled, unlabeled, edited]
+permissions:
+  contents: read
+jobs:
+  release-policy:
+    uses: Recurthink/.github/.github/workflows/release-policy.yml@main
