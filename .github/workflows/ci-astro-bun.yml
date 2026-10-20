@@ -46,8 +46,14 @@ jobs:
           NODE_ENV: production
 
       - name: Notify Coolify (deploy)
-        if: ${{ github.ref == 'refs/heads/main' && secrets.COOLIFY_WEBHOOK_URL != '' }}
+        if: github.ref == 'refs/heads/main'
+        env:
+          COOLIFY_WEBHOOK_URL: ${{ secrets.COOLIFY_WEBHOOK_URL }}
         run: |
-          curl --silent --fail \
-            -X GET "${{ secrets.COOLIFY_WEBHOOK_URL }}" \
-            -H "Accept: application/json"
+          if [ -n "$COOLIFY_WEBHOOK_URL" ]; then
+            curl --silent --show-error --fail --max-time 15 \
+              -X GET "$COOLIFY_WEBHOOK_URL" \
+              -H "Accept: application/json"
+          else
+            echo "Coolify webhook not configured; skipping."
+          fi
